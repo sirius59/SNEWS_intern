@@ -264,6 +264,63 @@ for k in K.Maxabs:
     maxdata=maxdata+str(k)+'\n'
 write(maxdata,dir+'K_maxabs.txt')
 
+#on sauve les courbes de lumière dans un fichier pour exectuer dans un script séparé
+data=''
+for i in range(len(U.Time)):
+    for j in range(len(U.Time[i])):
+        data=data+str(U.Time[i][j])+'\t'+str(U.Magnitude[i][j])+'\n'
+    data=data+'/'+'\n'
+write(data,dir+'U.txt')
+
+data=''
+for i in range(len(B.Time)):
+    for j in range(len(B.Time[i])):
+        data=data+str(B.Time[i][j])+'\t'+str(B.Magnitude[i][j])+'\n'
+    data=data+'/'+'\n'
+write(data,dir+'B.txt')
+
+data=''
+for i in range(len(V.Time)):
+    for j in range(len(V.Time[i])):
+        data=data+str(V.Time[i][j])+'\t'+str(V.Magnitude[i][j])+'\n'
+    data=data+'/'+'\n'
+write(data,dir+'V.txt')
+
+data=''
+for i in range(len(R.Time)):
+    for j in range(len(R.Time[i])):
+        data=data+str(R.Time[i][j])+'\t'+str(R.Magnitude[i][j])+'\n'
+    data=data+'/'+'\n'
+write(data,dir+'R.txt')
+
+data=''
+for i in range(len(I.Time)):
+    for j in range(len(I.Time[i])):
+        data=data+str(I.Time[i][j])+'\t'+str(I.Magnitude[i][j])+'\n'
+    data=data+'/'+'\n'
+write(data,dir+'I.txt')
+
+data=''
+for i in range(len(J.Time)):
+    for j in range(len(J.Time[i])):
+        data=data+str(J.Time[i][j])+'\t'+str(J.Magnitude[i][j])+'\n'
+    data=data+'/'+'\n'
+write(data,dir+'J.txt')
+
+data=''
+for i in range(len(H.Time)):
+    for j in range(len(H.Time[i])):
+        data=data+str(H.Time[i][j])+'\t'+str(H.Magnitude[i][j])+'\n'
+    data=data+'/'+'\n'
+write(data,dir+'H.txt')
+
+data=''
+for i in range(len(K.Time)):
+    for j in range(len(K.Time[i])):
+        data=data+str(K.Time[i][j])+'\t'+str(K.Magnitude[i][j])+'\n'
+    data=data+'/'+'\n'
+write(data,dir+'K.txt')
+
 ##partie pas utile pour la suite (mais utile pour vérifier)
 for r in range(len(event)):
     plt.plot(U.Time[r],U.Magnitude[r],'.',label=U.Name)
