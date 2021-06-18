@@ -7,9 +7,6 @@ import matplotlib.pyplot as plt
 
 ##Variables
 
-dir='C:\\Users\\cleme\\Desktop\\APC_2021\\tmp\\' #chemin du directory
-event=np.array(open(dir+'SN1BC_names.txt','r').read().split('\n')) #list de nom des évènements
-
 class Band: #classe band qui permettra de manipuler les données par bandes
 
     def __init__(self,name):#procédure d'initialisation
@@ -108,16 +105,16 @@ def gather(SN_names): #permet de collecter toutes les données depuis l'API
     for name in SN_names:
 
         metadata_request=req.get(f'https://api.sne.space/{name}?format=tsv').text
-        write(metadata_request,dir+'meta_tmp.txt')
-        metadata=read_meta(dir+'meta_tmp.txt')
+        write(metadata_request,dirtmp+'meta_tmp.txt')
+        metadata=read_meta(dirtmp+'meta_tmp.txt')
 
         type.append(metadata[3])
         ebv.append(float(metadata[8]))
         lumdist.append(float(metadata[15]))
 
         photometry_request=req.get(f'https://api.astrocats.space/{name}/photometry/time+e_time+u_time+magnitude+e_magnitude+band+upperlimit?format=tsv').text
-        write(photometry_request,dir+'photometry_tmp.txt')
-        photometry=read_photometry(dir+'photometry_tmp.txt')
+        write(photometry_request,dirtmp+'photometry_tmp.txt')
+        photometry=read_photometry(dirtmp+'photometry_tmp.txt')
 
         timetmp=[] #liste des temps
         e_timetmp=[] #etc..
@@ -228,42 +225,42 @@ K.mag_rescale()
 maxdata=''
 for u in U.Maxabs:
     maxdata=maxdata+str(u)+'\n'
-write(maxdata,dir+'U_maxabs.txt')
+write(maxdata,dirtmp+'U_maxabs.txt')
 
 maxdata=''
 for b in B.Maxabs:
     maxdata=maxdata+str(b)+'\n'
-write(maxdata,dir+'B_maxabs.txt')
+write(maxdata,dirtmp+'B_maxabs.txt')
 
 maxdata=''
 for v in V.Maxabs:
     maxdata=maxdata+str(v)+'\n'
-write(maxdata,dir+'V_maxabs.txt')
+write(maxdata,dirtmp+'V_maxabs.txt')
 
 maxdata=''
 for r in R.Maxabs:
     maxdata=maxdata+str(r)+'\n'
-write(maxdata,dir+'R_maxabs.txt')
+write(maxdata,dirtmp+'R_maxabs.txt')
 
 maxdata=''
 for i in I.Maxabs:
     maxdata=maxdata+str(i)+'\n'
-write(maxdata,dir+'I_maxabs.txt')
+write(maxdata,dirtmp+'I_maxabs.txt')
 
 maxdata=''
 for j in J.Maxabs:
     maxdata=maxdata+str(j)+'\n'
-write(maxdata,dir+'J_maxabs.txt')
+write(maxdata,dirtmp+'J_maxabs.txt')
 
 maxdata=''
 for h in H.Maxabs:
     maxdata=maxdata+str(h)+'\n'
-write(maxdata,dir+'H_maxabs.txt')
+write(maxdata,dirtmp+'H_maxabs.txt')
 
 maxdata=''
 for k in K.Maxabs:
     maxdata=maxdata+str(k)+'\n'
-write(maxdata,dir+'K_maxabs.txt')
+write(maxdata,dirtmp+'K_maxabs.txt')
 
 #on sauve les courbes de lumière dans un fichier pour exectuer dans un script séparé
 data=''
@@ -271,70 +268,53 @@ for i in range(len(U.Time)):
     for j in range(len(U.Time[i])):
         data=data+str(U.Time[i][j])+'\t'+str(U.Magnitude[i][j])+'\n'
     data=data+'/'+'\n'
-write(data,dir+'U.txt')
+write(data,dirtmp+'U.txt')
 
 data=''
 for i in range(len(B.Time)):
     for j in range(len(B.Time[i])):
         data=data+str(B.Time[i][j])+'\t'+str(B.Magnitude[i][j])+'\n'
     data=data+'/'+'\n'
-write(data,dir+'B.txt')
+write(data,dirtmp+'B.txt')
 
 data=''
 for i in range(len(V.Time)):
     for j in range(len(V.Time[i])):
         data=data+str(V.Time[i][j])+'\t'+str(V.Magnitude[i][j])+'\n'
     data=data+'/'+'\n'
-write(data,dir+'V.txt')
+write(data,dirtmp+'V.txt')
 
 data=''
 for i in range(len(R.Time)):
     for j in range(len(R.Time[i])):
         data=data+str(R.Time[i][j])+'\t'+str(R.Magnitude[i][j])+'\n'
     data=data+'/'+'\n'
-write(data,dir+'R.txt')
+write(data,dirtmp+'R.txt')
 
 data=''
 for i in range(len(I.Time)):
     for j in range(len(I.Time[i])):
         data=data+str(I.Time[i][j])+'\t'+str(I.Magnitude[i][j])+'\n'
     data=data+'/'+'\n'
-write(data,dir+'I.txt')
+write(data,dirtmp+'I.txt')
 
 data=''
 for i in range(len(J.Time)):
     for j in range(len(J.Time[i])):
         data=data+str(J.Time[i][j])+'\t'+str(J.Magnitude[i][j])+'\n'
     data=data+'/'+'\n'
-write(data,dir+'J.txt')
+write(data,dirtmp+'J.txt')
 
 data=''
 for i in range(len(H.Time)):
     for j in range(len(H.Time[i])):
         data=data+str(H.Time[i][j])+'\t'+str(H.Magnitude[i][j])+'\n'
     data=data+'/'+'\n'
-write(data,dir+'H.txt')
+write(data,dirtmp+'H.txt')
 
 data=''
 for i in range(len(K.Time)):
     for j in range(len(K.Time[i])):
         data=data+str(K.Time[i][j])+'\t'+str(K.Magnitude[i][j])+'\n'
     data=data+'/'+'\n'
-write(data,dir+'K.txt')
-
-##partie pas utile pour la suite (mais utile pour vérifier)
-for r in range(len(event)):
-    plt.plot(U.Time[r],U.Magnitude[r],'.',label=U.Name)
-    plt.plot(B.Time[r],B.Magnitude[r],'.',label=B.Name)
-    plt.plot(V.Time[r],V.Magnitude[r],'.',label=V.Name)
-    plt.plot(R.Time[r],R.Magnitude[r],'.',label=R.Name)
-    plt.plot(I.Time[r],I.Magnitude[r],'.',label=I.Name)
-    plt.plot(J.Time[r],J.Magnitude[r],'.',label=J.Name)
-    plt.plot(H.Time[r],H.Magnitude[r],'.',label=H.Name)
-    plt.plot(K.Time[r],K.Magnitude[r],'.',label=K.Name)
-    plt.legend()
-    plt.xlabel('temps en jours')
-    plt.ylabel('Magnitude absolue')
-    plt.title(U.Event[r])
-    plt.gca().invert_yaxis()
-    plt.show()
+write(data,dirtmp+'K.txt')
