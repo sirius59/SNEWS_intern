@@ -49,11 +49,3 @@ for i in magbins:
         meanmag.append(np.nan)
 
 write_mean(timebins,meanmag,dirtmp+band+'_mean.txt')
-
-plt.plot(timebins,meanmag,'.',label=band+' mean')
-plt.gca().invert_yaxis()
-#plt.title('3e test de moyenne sur l\'échantillon de SN')
-plt.xlabel('temps en jours')
-plt.ylabel('magnitude absolue')
-plt.legend()
-plt.show()

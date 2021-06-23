@@ -8,12 +8,12 @@ from scipy.optimize import curve_fit
 
 dirtmp='C:\\Users\\cleme\\Desktop\\APC_2021\\tmp\\' #chemin du directory
 dir='C:\\Users\\cleme\\Desktop\\APC_2021\\'
-filename='SN1BC_names'
+filename='SN1BC_article'
 event=np.array(open(dirtmp+filename+'.txt','r').read().split('\n')) #list de nom des évènements
 
 exec(open(dir+'Light_curves.py','r').read()) #execute le code Light_curves.py
 
-band='V'
+band='U'
 LC=band+'.txt'
 
 exec(open(dir+'moy.py','r').read()) #execute le code moy.py
