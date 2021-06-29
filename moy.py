@@ -1,6 +1,7 @@
 ## Import libraries
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.interpolate import UnivariateSpline,BPoly
 
 ## Functions
 
@@ -17,14 +18,6 @@ def read_lightcurves(path):
             mag.append(float(tmp[1]))
     return time,mag
 
-def write_mean(time,mag,path): #permet d'ecrire dans un document
-    f=open(path,'w')
-    for i in range(len(time)):
-        if np.isnan(mag[i]):
-            continue
-        else:
-            f.write(str(time[i])+'\t'+str(mag[i])+'\n')
-    f.close()
 
 ##core
 time,mag=read_lightcurves(dirtmp+LC)
@@ -43,9 +36,24 @@ for i in range(len(time)):
         magbins[intargument].append(mag[i])
 
 for i in magbins:
-    if len(i)>7:
+    if len(i)>3:
         meanmag.append(np.mean(i))
     else:
         meanmag.append(np.nan)
 
-write_mean(timebins,meanmag,dirtmp+band+'_mean.txt')
+arg=np.isnan(np.array(meanmag))
+arg=arg==False
+
+T=np.array(timebins)[arg]
+M=np.array(meanmag)[arg]
+
+spl=UnivariateSpline(T,M,k=5)
+
+x=np.linspace(-20,30,10000)
+y=spl(x)
+
+plt.plot(timebins,meanmag,'.')
+plt.plot(x,y)
+plt.legend()
+plt.gca().invert_yaxis()
+plt.show()

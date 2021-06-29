@@ -16,4 +16,4 @@ exec(open(dir+'Light_curves.py','r').read()) #execute le code Light_curves.py
 band='U'
 LC=band+'.txt'
 
-exec(open(dir+'moy.py','r').read()) #execute le code moy.py
+exec(open(dir+'article.py','r').read()) #execute le code Light_curves.py

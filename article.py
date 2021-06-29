@@ -1,56 +1,91 @@
 ## Import libraries
 import numpy as np
 import matplotlib.pyplot as plt
-
-
-
-## Variables
-dir='C:\\Users\\cleme\\Desktop\\APC_2021\\tmp\\' #chemin du directory
-band='V'
-LC=band+'.txt'
+from scipy.interpolate import UnivariateSpline,BPoly
 
 
 ## Functions
 
 def read_lightcurves(path):
-    time=[]
-    mag=[]
+    time=[[]]
+    mag=[[]]
     data=open(path,'r').read().split('\n')
     for i in data:
-        if i=='/' or i=='':
+        if i=='/':
+            time.append([])
+            mag.append([])
+        elif i=='':
             continue
         else:
             tmp=i.split('\t')
-            time.append(float(tmp[0]))
-            mag.append(float(tmp[1]))
+            time[-1].append(float(tmp[0]))
+            mag[-1].append(float(tmp[1]))
+    del(time[-1],mag[-1])
     return time,mag
 
-##core
-time,mag=read_lightcurves(dir+LC)
+def argTmax(time):
+    args=np.where(np.array(time)<70)
+    return args[0][-1]
 
-tmin,tmax,dt=round(min(time),0),int(max(time)),0.5
-timebins=np.array([round(tmin+i*dt,1) for i in range(int(1/dt*(tmax-tmin)+1))])
-magbins=[[] for i in range(len(timebins))]
-meanmag=[]
+def write_art(param,knots,path): #permet d'ecrire dans un document
+    f=open(path,'w')
+    line=''
+    for i in param:
+        line+=str(i)+'\t'
+    line+='\n'
+    for i in knots:
+        line+=str(i)+'\t'
+    f.write(line)
+    f.close()
+
+def meancurve(slow,fast):
+    mean=[]
+    for i in range(len(slow)):
+        mean.append((slow[i]+fast[i])/2)
+    return np.array(mean)
+
+##core
+time,mag=read_lightcurves(dirtmp+LC)
+
+params=[]
+knots=[]
 
 for i in range(len(time)):
-    argument=np.where(abs(timebins-time[i])<0.5)
-    if len(argument[0])==0:
-        continue
-    else:
-        intargument=int(argument[0][0])
-        magbins[intargument].append(mag[i])
+    cut=argTmax(time[i])
+    T=time[i][:cut]
+    M=mag[i][:cut]
 
-for i in magbins:
-    if len(i)>7:
-        meanmag.append(np.mean(i))
-    else:
-        meanmag.append(np.nan)
+    spl=UnivariateSpline(T,M,k=5)
+    params.append([[j] for j in spl.get_coeffs()])
+    knots.append(spl.get_knots())
 
-plt.plot(timebins,meanmag,'.',label=band+' mean')
+    x=np.linspace(T[0],T[-1])
+    y=spl(x)
+
+
+    plt.plot(T,M,'.')
+    plt.plot(x,y)
+
+    plt.gca().invert_yaxis()
+    plt.xlabel('temps en jours')
+    plt.ylabel('magnitude absolue')
+    plt.show()
+
+x=np.linspace(-15,30,10000)
+slow=BPoly(params[0],knots[0])
+fast=BPoly(params[1],knots[1])
+slowcurve=slow(x)
+fastcurve=fast(x)
+mean=meancurve(slowcurve,fastcurve)
+
+plt.plot(x,slowcurve,label='slow')
+plt.plot(x,fastcurve,label='fast')
+plt.plot(x,mean,label='mean')
 plt.gca().invert_yaxis()
-#plt.title('3e test de moyenne sur l\'échantillon de SN')
+plt.legend()
+plt.title('bande '+band)
 plt.xlabel('temps en jours')
 plt.ylabel('magnitude absolue')
-plt.legend()
 plt.show()
+
+np.savetxt(dirtmp+'article_mean_points.txt',mean,delimiter='\t')
