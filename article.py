@@ -59,19 +59,7 @@ for i in range(len(time)):
     params.append([[j] for j in spl.get_coeffs()])
     knots.append(spl.get_knots())
 
-    x=np.linspace(T[0],T[-1])
-    y=spl(x)
-
-
-    plt.plot(T,M,'.')
-    plt.plot(x,y)
-
-    plt.gca().invert_yaxis()
-    plt.xlabel('temps en jours')
-    plt.ylabel('magnitude absolue')
-    plt.show()
-
-x=np.linspace(-15,30,10000)
+x=np.linspace(-20,30,10000)
 slow=BPoly(params[0],knots[0])
 fast=BPoly(params[1],knots[1])
 slowcurve=slow(x)
@@ -83,9 +71,7 @@ plt.plot(x,fastcurve,label='fast')
 plt.plot(x,mean,label='mean')
 plt.gca().invert_yaxis()
 plt.legend()
-plt.title('bande '+band)
+plt.title('bande '+bandstr)
 plt.xlabel('temps en jours')
 plt.ylabel('magnitude absolue')
 plt.show()
-
-np.savetxt(dirtmp+'article_mean_points.txt',mean,delimiter='\t')
