@@ -17,8 +17,8 @@ event=np.array(open(dirtmp+filename+'.txt','r').read().split('\n')) #list de nom
 
 exec(open(dir+'Light_curves.py','r').read()) #execute le code Light_curves.py
 
-##effectue un fit et la moyenne en bande U
-bandstr='V'
+##effectue un fit et la moyenne en bande U,B,V,R,I
+bandstr='U'
 LC=bandstr+'.txt'
 
 exec(open(dir+'article.py','r').read()) #execute le code Light_curves.py
@@ -35,3 +35,6 @@ exec(open(dir+'mag_histo.py','r').read())
 
 ##défini la distibution des distances
 exec(open(dir+'distance_distrib.py','r').read())
+
+## prévois une courbe de lumière en bande U,B,V,R,I
+exec(open(dir+'random.py','r').read())
