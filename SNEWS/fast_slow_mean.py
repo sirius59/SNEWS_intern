@@ -111,6 +111,10 @@ def meancurve(slow,fast):
         mean.append((slow[i]+fast[i])/2)
     return np.array(mean)
 
+def phiBB(t,t0,a,b,c):
+    delta=t-t0
+    return -a*delta**1.6/(np.exp(b*delta**0.5)-1)+c
+
 ##Object
 
 class Band: #classe band qui permettra de manipuler les données par bandes
@@ -182,10 +186,6 @@ class Band: #classe band qui permettra de manipuler les données par bandes
             for j in range(len(mag)):
                 self.Magnitude[i][j]+=-magabs_max #on passe ne magnitude absolue
 
-def phiBB(t,t0,a,b,c):
-    delta=t-t0
-    return -a*delta**1.6/(np.exp(b*delta**0.5)-1)+c
-
 ##Directories
 
 dirSNdata='C:\\Users\\cleme\\Desktop\\SNEWS\\SNdata\\'
@@ -229,7 +229,7 @@ for bande in ('B','V','R','I'):
         M=mag[:cut]
         x=np.linspace(-10,20,10000)
         if i==0:
-            spl=UnivariateSpline(T,M,k=4)
+            spl=UnivariateSpline(T,M,k=5)
             globals()[f'{bande}'].Slow=spl(x)
             #popt,pcov=curve_fit(phiBB,T,M,bounds=([-20,0,0,np.min(M)],[5,np.inf,np.inf,0]))
             #plt.plot(x,phiBB(x,-20,5,1,np.max(M)))
