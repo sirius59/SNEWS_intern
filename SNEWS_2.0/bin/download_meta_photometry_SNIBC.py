@@ -53,4 +53,3 @@ event_name=pd.read_csv(os.path.join(file_dir,'downloaded/events_IBC.csv')).event
 for name in event_name:
     check_meta_and_download(name)
     check_photo_and_download(name)
-print('Done')

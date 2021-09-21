@@ -44,9 +44,6 @@ def check_photometry(name):
                     is_in.append(string)
                 else:
                     continue
-
-    if len(is_in)>0 and name not in event_OK:
-        event_OK.append(name)
     for band in is_in:
         globals()[f'event_{band}'].append(name)
 
@@ -57,12 +54,11 @@ def check_photometry(name):
 file_dir=os.path.dirname(os.path.realpath('__file__')) #directory of the curent file
 check_dir_and_create('data')#check if the directory is available and if not create it
 check_dir_and_create('data/IBC')
-requested_band=['U','G','R','I','Z','Y','J','H','K','V']
-event_OK=[]
+requested_band=['U','G','R','I','Y','J','H','V']
 
 
 for str_band in requested_band:
-    if not os.path.isfile(os.path.join(file_dir,f'data/IBC/events_IBC_{str_band}.csv')) or not os.path.isfile(os.path.join(file_dir,f'data/events_IBC_USED.csv')): #if no file, download it
+    if not os.path.isfile(os.path.join(file_dir,f'data/IBC/events_IBC_{str_band}.csv')): #if no file, download it
 
         print('Filtering data...')
         event_name=pd.read_csv(os.path.join(file_dir,'downloaded/events_IBC.csv')).event
@@ -75,7 +71,7 @@ for str_band in requested_band:
                 event_meta_OK.append(name)
 
         #check if photometry data is available
-        event_U,event_V,event_R,event_I,event_Z,event_Y,event_J,event_H,event_K,event_G=([] for i in range(10))
+        event_U,event_V,event_R,event_I,event_Y,event_J,event_H,event_G=([] for i in range(8))
 
         for name in event_meta_OK:
             check_photometry(name)
@@ -85,11 +81,9 @@ for str_band in requested_band:
         dfV=pd.DataFrame(data=event_V)
         dfR=pd.DataFrame(data=event_R)
         dfI=pd.DataFrame(data=event_I)
-        dfZ=pd.DataFrame(data=event_Z)
         dfY=pd.DataFrame(data=event_Y)
         dfJ=pd.DataFrame(data=event_J)
         dfH=pd.DataFrame(data=event_H)
-        dfK=pd.DataFrame(data=event_K)
         dfG=pd.DataFrame(data=event_G)
 
 
@@ -97,12 +91,7 @@ for str_band in requested_band:
         dfV[0].to_csv(os.path.join(file_dir,'data/IBC/events_IBC_V.csv'),index=False,header=False)
         dfR[0].to_csv(os.path.join(file_dir,'data/IBC/events_IBC_R.csv'),index=False,header=False)
         dfI[0].to_csv(os.path.join(file_dir,'data/IBC/events_IBC_I.csv'),index=False,header=False)
-        dfZ[0].to_csv(os.path.join(file_dir,'data/IBC/events_IBC_Z.csv'),index=False,header=False)
         dfY[0].to_csv(os.path.join(file_dir,'data/IBC/events_IBC_Y.csv'),index=False,header=False)
         dfJ[0].to_csv(os.path.join(file_dir,'data/IBC/events_IBC_J.csv'),index=False,header=False)
         dfH[0].to_csv(os.path.join(file_dir,'data/IBC/events_IBC_H.csv'),index=False,header=False)
-        dfK[0].to_csv(os.path.join(file_dir,'data/IBC/events_IBC_K.csv'),index=False,header=False)
         dfG[0].to_csv(os.path.join(file_dir,'data/IBC/events_IBC_G.csv'),index=False,header=False)
-
-        dfOK=pd.DataFrame(data=event_OK)
-        dfOK[0].to_csv(os.path.join(file_dir,'data/events_IBC_USED.csv'),index=False,header=False)
